@@ -30,6 +30,7 @@ model PostsCode {
   id       String    @id @default(auto()) @map("_id") @db.ObjectId
   userId   String?   @db.ObjectId
   language String[]
+  photo    String
   status   Status
   answers  Answers[]
   User     User?     @relation(fields: [userId], references: [id])
@@ -47,7 +48,6 @@ model Answers {
 }
 
 enum Status {
-  Accepted
-  Rejected
+  Answered
   Pending
 }

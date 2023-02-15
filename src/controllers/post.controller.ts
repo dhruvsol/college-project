@@ -41,13 +41,14 @@ class PostController implements Controller {
     request: express.Request,
     response: express.Response
   ) => {
-    const { status, language, userId } = request.body;
+    const { status, language, userId, photo } = request.body;
     try {
       const res = await prisma.postsCode.create({
         data: {
           status,
           language,
           userId,
+          photo,
         },
       });
       return response.send(createSuccessResponse(res));
