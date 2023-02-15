@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
+  fullname  String
+  username  String
+  email     String
+  avatar    String
+  password  String
+  photoPost PostsPhoto[]
+  codePosts PostsCode[]
+  answers   Answers[]
+}
+
+model PostsPhoto {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  photo  String
+  userId String? @db.ObjectId
+  User   User?   @relation(fields: [userId], references: [id])
+}
+
+model PostsCode {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String?   @db.ObjectId
+  language String[]
+  status   Status
+  answers  Answers[]
+  User     User?     @relation(fields: [userId], references: [id])
+}
+
+model Answers {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String?    @db.ObjectId
+  upVote      Int        @default(0)
+  downVote    Int        @default(0)
+  answer      String
+  postsCodeId String?    @db.ObjectId
+  User        User?      @relation(fields: [userId], references: [id])
+  PostsCode   PostsCode? @relation(fields: [postsCodeId], references: [id])
+}
+
+enum Status {
+  Accepted
+  Rejected
+  Pending
+}
